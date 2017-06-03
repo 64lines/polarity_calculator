@@ -46,11 +46,12 @@ def make_analysis():
     print "positive index: %.2f%%" % (percentage_positive * 100)
     print "negative index: %.2f%%" % (percentage_negative * 100)
 
-    percentage_difference_neutrality = 0.10
+    percentage_difference_neutrality = 0.05
     if abs(percentage_negative - percentage_positive) < percentage_difference_neutrality:
         print "The sentence is neutral!"
     elif percentage_negative > percentage_positive:
         print "The sentence is negative!"
     elif percentage_negative < percentage_positive:
         print "The sentence is positive!"
+
 make_analysis()
