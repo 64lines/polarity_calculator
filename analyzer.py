@@ -1,25 +1,14 @@
 from word_trainer import generate_model_metadata, format_text
 
-def get_common_words(positive_metadata, negative_metadata):
-    list_common_words = []
-    for i in range(0, len(positive_metadata)):
-        for j in range(0, len(negative_metadata)):
-            if positive_metadata[i]['word'] == negative_metadata[j]['word']:
-                list_common_words.append(positive_metadata[i]['word'])
-
-    return list_common_words
-
 def make_analysis():
-    positive_metadata = generate_model_metadata('spanish_positive_reviews.txt')
-    negative_metadata = generate_model_metadata('spanish_negative_reviews.txt')
-    list_common_words = get_common_words(positive_metadata, negative_metadata)
+    # Model with the positive/negative words already analized and
+    # weighted using the files training files especified.
 
-    # Remove common words
-    for common_word in list_common_words:
-        delete_word = filter(lambda x: x['word'] == common_word, positive_metadata)[0]
-        positive_metadata.remove(delete_word)
-        delete_word = filter(lambda x: x['word'] == common_word, negative_metadata)[0]
-        negative_metadata.remove(delete_word)
+    # Trained model with positive training data
+    positive_metadata = generate_model_metadata('spanish_positive_reviews.txt')
+
+    # Trained model with negative training data
+    negative_metadata = generate_model_metadata('spanish_negative_reviews.txt')
 
     positive_points = 0
     negative_points = 0
@@ -57,8 +46,11 @@ def make_analysis():
     print "positive index: %.2f%%" % (percentage_positive * 100)
     print "negative index: %.2f%%" % (percentage_negative * 100)
 
-    if percentage_negative > percentage_positive:
+    percentage_difference_neutrality = 0.10
+    if abs(percentage_negative - percentage_positive) < percentage_difference_neutrality:
+        print "The sentence is neutral!"
+    elif percentage_negative > percentage_positive:
         print "The sentence is negative!"
-    if percentage_negative < percentage_positive:
+    elif percentage_negative < percentage_positive:
         print "The sentence is positive!"
 make_analysis()
